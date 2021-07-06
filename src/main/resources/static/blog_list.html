@@ -27,9 +27,9 @@
         <!-- 左侧个人信息 -->
         <div class="container-left">
             <div class="card">
-                <img src="img/doge.jpg" class="avtar" alt="">
-                <h3>比特小可爱</h3>
-                <a href="http:www.github.com">github 地址</a>
+                <img id="photo" src="img/doge.jpg" class="avtar" alt="">
+                <h3 id="username">比特小可爱</h3>
+                <a id="github" href="http:www.github.com" >github 地址</a>
                 <div class="counter">
                     <span>文章</span>
                     <span>分类</span>
@@ -68,5 +68,21 @@
         </div>
     </div>
 </body>
+<script src="js/jquery.min.js"></script>
 
+<script>
+    window.onload = function(){
+        $.ajax({
+            type:"GET",
+            url:"user/getUserInfo",
+            data:{
+            },
+        }).done(function (data){
+            if(data.state == 1){
+                $("#username").text(data.user.username);
+            }
+            console.log(data);
+        });
+    }
+</script>
 </html>

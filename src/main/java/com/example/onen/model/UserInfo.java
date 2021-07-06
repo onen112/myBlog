@@ -13,4 +13,5 @@ public class UserInfo {
     private Date createtime;
     private Date updatetime;
     private int state;
+    private String github;
 }
