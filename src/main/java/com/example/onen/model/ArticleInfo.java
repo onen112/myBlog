@@ -10,7 +10,7 @@ public class ArticleInfo {
     private String title;
     private String content;
     private Date createtime;
-    private Date updatedtile;
+    private Date updatetime;
     private int uid;
     private int rcount;
     private int state;

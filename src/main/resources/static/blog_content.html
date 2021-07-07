@@ -8,6 +8,7 @@
     <title>博客正文</title>
     <link rel="stylesheet" href="css/conmmon.css">
     <link rel="stylesheet" href="css/blog_content.css">
+    <link rel="stylesheet" href="editor.md/css/editormd.min.css"/>
 </head>
 
 <body>
@@ -19,7 +20,6 @@
         <span class="spacer"></span>
         <a href="blog_list.html">主页</a>
         <a href="blog_edit.html">写博客</a>
-        <a href="login.html">登陆</a>
     </div>
     <!-- 版心 -->
     <div class="container">
@@ -27,7 +27,7 @@
         <div class="container-left">
             <div class="card">
                 <img src="img/doge.jpg" class="avtar" alt="">
-                <h3>比特小可爱</h3>
+                <h3 id="username">比特小可爱</h3>
                 <a href="http:www.github.com">github 地址</a>
                 <div class="counter">
                     <span>文章</span>
@@ -40,42 +40,77 @@
             </div>
         </div>
         <!-- 右侧内容详情 -->
-        <div class="container-right">
+
+        <div class="container-right" style="background-color: #fff">
             <div class="blog-content">
-                <!-- 博客标题 -->
-                <h3>我的第一篇博客</h3>
+                <h2 id="title" style="text-align: center">我的第一篇博客</h2>
                 <!-- 博客时间 -->
-                <div class="date">2021-06-02</div>
-                <!-- 博客正文 -->
-                <p>
-                    从今天起我要好好敲代码.
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut recusandae omnis natus ut! Autem alias
-                    ullam sit facilis ipsa dolore, molestiae neque aperiam in a facere dolor mollitia dolorum animi.
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut recusandae omnis natus ut! Autem alias
-                    ullam sit facilis ipsa dolore, molestiae neque aperiam in a facere dolor mollitia dolorum animi.
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut recusandae omnis natus ut! Autem alias
-                    ullam sit facilis ipsa dolore, molestiae neque aperiam in a facere dolor mollitia dolorum animi.
-                </p>
-                <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium sint accusantium, enim iste
-                    corrupti itaque, omnis alias maiores nemo quae rerum deleniti facere officiis iure velit. Blanditiis
-                    pariatur delectus perferendis.
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium sint accusantium, enim iste
-                    corrupti itaque, omnis alias maiores nemo quae rerum deleniti facere officiis iure velit. Blanditiis
-                    pariatur delectus perferendis.
-                </p>
-                <p>
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sed, laudantium suscipit exercitationem
-                    eius repellat laboriosam voluptates, nisi magni esse nostrum obcaecati saepe veritatis, porro
-                    pariatur explicabo! Debitis non possimus voluptatum.
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sed, laudantium suscipit exercitationem
-                    eius repellat laboriosam voluptates, nisi magni esse nostrum obcaecati saepe veritatis, porro
-                    pariatur explicabo! Debitis non possimus voluptatum.
-                </p>
+                <div style="color: #777" id="createtime" class="date">2021-06-02</div>
+
+                <div id="content_id">
+
+                </div>
+
+
             </div>
         </div>
     </div>
+    <script src="js/jquery.min.js"></script>
 
-</body>
+    <script src="editor.md/lib/flowchart.min.js"></script>
+    <script src="editor.md/lib/jquery.flowchart.min.js"></script>
+    <script src="editor.md/lib/marked.min.js"></script>
+    <script src="editor.md/lib/prettify.min.js"></script>
+    <script src="editor.md/lib/raphael.min.js"></script>
+    <script src="editor.md/lib/sequence-diagram.min.js"></script>
+    <script src="editor.md/lib/underscore.min.js"></script>
+    <script src="editor.md/editormd.min.js"></script>
+    <script src="js/getUserInfo.js"></script>
+    <script type="text/javascript">
+        var testEditor;
+        //获取html内容
 
+
+        $(function () {
+            getUserInfo();
+            var content = "# 正在加载中...";
+            var title = $("#title");
+            var time = $("#createtime")
+            var str = location.href;
+            console.log(str);
+            var tmp = str.split('?')[1].split("=");
+            console.log(tmp)
+            $.ajax({
+                type:"GET",
+                url:"article/getContent?id=" + tmp[1],
+                data:{},
+            }).done(function(data){
+                if( data.state == 1){
+                    title.text(data.article.title);
+                    content = data.article.content;
+                    console.log(content);
+                    time.text(data.article.createtime.split('.')[0].split('T')[0]);
+                }else{
+                    alert(data.msg);
+                    location.href = "/blog_list.html";
+                }
+                console.log(data);
+                showContent(content);
+            });
+        });
+
+        function showContent(content){
+            testEditor = editormd.markdownToHTML("content_id", {//注意：这里是上面DIV的id
+                htmlDecode: "style,script,iframe",
+                emoji: true,
+                taskList: true,
+                tex: true, // 默认不解析
+                flowChart: true, // 默认不解析
+                sequenceDiagram: true, // 默认不解析
+                codeFold: true,
+                markdown:content,
+            });
+        }
+    </script>
+    </body>
 </html>

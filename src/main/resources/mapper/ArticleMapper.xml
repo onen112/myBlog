@@ -7,4 +7,19 @@
             #{title},#{content},#{uid}
         )
  </insert>
+    <update id="addRCount">
+        UPDATE articleinfo SET rcount=rcount+1 where id=#{0}
+    </update>
+    <update id="updateArt">
+        update articleinfo set title = #{title},content=#{content},updatetime=now() where id=#{id}
+    </update>
+    <delete id="deleteArt">
+        delete from articleinfo where id = #{0};
+    </delete>
+    <select id="getArticles" resultType="com.example.onen.model.ArticleInfo">
+        select * from articleinfo where uid = #{0};
+    </select>
+    <select id="getArticleById" parameterType="java.lang.Integer" resultType="com.example.onen.model.ArticleInfo">
+        select * from articleinfo where id= #{0};
+    </select>
 </mapper>

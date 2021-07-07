@@ -8,4 +8,5 @@ public interface UserMapper {
     public UserInfo login(UserInfo userInfo);
     public int sigin(UserInfo userInfo);
     public int isSigin(String username);
+
 }

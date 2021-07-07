@@ -33,31 +33,41 @@
         <!-- 标题编辑区 -->
         <div class="title">
             <input id="title" type="text"  placeholder="在这里写下文章标题">
-            <button onclick="mysub()">发布文章</button>
+            <button onclick="mysub()">保存修改</button>
         </div>
         <!-- 创建编辑器标签 -->
         <div id="editorDiv"></div>
     </div>
     <script>
-        // 初始化编辑器
-        var editor = editormd("editorDiv", {
-            // 这里的尺寸必须在这里设置. 设置样式会被 editormd 自动覆盖掉. 
-            width: "100%",
-            // 高度 100% 意思是和父元素一样高. 要在父元素的基础上去掉标题编辑区的高度
-            height: "calc(100% - 50px)",
-            // 编辑器中的初始内容
-            markdown: "# 在这里写下一篇博客",
-            // 指定 editor.md 依赖的插件路径
-            path: "editor.md/lib/",
-            saveHTMLToTextarea:true // 
-        });
+
         // 提交
+        var title = $("#title");
+        var content = "# 加载中...";
+        var editor;
+        var id = "";
+        $(function (){
+            id = location.href.split('?')[1].split('=')[1];
 
+            $.ajax({
+                type:"GET",
+                url:"article/getContent?id=" + id,
+                data:{
 
+                },
+            }).done(function(data){
+               if(data.state == 1){
+                   title.val(data.article.title);
+                   content = data.article.content;
+                   showContent();
+               } else{
+                   alert("出现未知错误");
+                   location.href = "bolg_list.html"
+               }
+            });
+        })
         function mysub(){
-            var content = editor.getMarkdown();
-            var title = $("#title");
-
+            content = editor.getMarkdown();
+            title = $("#title");
             if(title.val() == "" || content == ""){
                 console.log(title.val())
                 console.log(content);
@@ -66,19 +76,33 @@
             }
             $.ajax({
                 type:"POST",
-                url:"article/addArticle",
+                url:"article/updateArt",
                 data: JSON.stringify({
+                    "id":id,
                     "title": title.val(),
                     "content": content,
                 }),
                 contentType:"application/json",
             }).done(function (data){
                 if(data.state == 1){
-                    alert("发布成功！");
-                    location.href = 'blog_list.html';
+                    alert("修改成功！");
+                    location.href='blog_list.html'
                 }else{
                     alert(data.msg);
                 }
+            });
+        }
+        function showContent(){
+                editor = editormd("editorDiv", {
+                // 这里的尺寸必须在这里设置. 设置样式会被 editormd 自动覆盖掉.
+                width: "100%",
+                // 高度 100% 意思是和父元素一样高. 要在父元素的基础上去掉标题编辑区的高度
+                height: "calc(100% - 50px)",
+                // 编辑器中的初始内容
+                markdown: content,
+                // 指定 editor.md 依赖的插件路径
+                path: "editor.md/lib/",
+                saveHTMLToTextarea:true //
             });
         }
     </script>
