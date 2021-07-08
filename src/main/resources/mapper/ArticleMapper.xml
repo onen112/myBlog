@@ -22,4 +22,7 @@
     <select id="getArticleById" parameterType="java.lang.Integer" resultType="com.example.onen.model.ArticleInfo">
         select * from articleinfo where id= #{0};
     </select>
+    <select id="getRcount" resultType="com.example.onen.model.UserShow">
+        	select sum(rcount) rcount,count(0) allart  from articleinfo where uid = #{0};
+    </select>
 </mapper>

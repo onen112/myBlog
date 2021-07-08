@@ -2,6 +2,8 @@ package com.example.onen.controller;
 
 
 import com.example.onen.model.UserInfo;
+import com.example.onen.model.UserShow;
+import com.example.onen.service.ArticleService;
 import com.example.onen.service.UserService;
 import com.example.onen.util.MD5Util;
 import com.sun.deploy.net.HttpResponse;
@@ -23,6 +25,9 @@ public class UserController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    ArticleService articleService;
     @Autowired
     MD5Util md5;
 
@@ -84,21 +89,23 @@ public class UserController {
 
     }
 
+    //获取用户信息
     @RequestMapping("/getUserInfo")
     public Object getUserInfo(HttpServletRequest request){
         HttpSession session = request.getSession(false);
         int state = -1;
         String msg = "未知错误";
-        UserInfo user = null;
+        UserShow user = null;
         if(session == null){
             state = 0;
             msg = "用户未登录";
         }else{
-            user = (UserInfo) session.getAttribute("user");
-            if(user != null){
+            UserInfo userInfo = (UserInfo) session.getAttribute("user");
+            if(userInfo != null){
+                user = articleService.selectRcount(userInfo.getId());
+                user.setUsername(userInfo.getUsername());
                 state = 1;
                 msg = "查询成功";
-                user.setPassword("");
             }
         }
         Map<String, Object> map = new HashMap<>();

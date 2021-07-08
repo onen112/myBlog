@@ -18,8 +18,10 @@
         <span class="title">我的博客系统</span>
         <!-- 用来占据中间位置 -->
         <span class="spacer"></span>
-        <a href="blog_list.html">主页</a>
+        <a id="test" href="blog_list.html">主页</a>
+        <a id="edit" href="">进入编辑</a>
         <a href="blog_edit.html">写博客</a>
+
     </div>
     <!-- 版心 -->
     <div class="container">
@@ -30,12 +32,12 @@
                 <h3 id="username">比特小可爱</h3>
                 <a href="http:www.github.com">github 地址</a>
                 <div class="counter">
-                    <span>文章</span>
-                    <span>分类</span>
+                    <span>文章总数: </span>
+                    <span id="allart">0</span>
                 </div>
                 <div class="counter">
-                    <span>2</span>
-                    <span>1</span>
+                    <span >总阅读量: </span>
+                    <span id="rcount">1</span>
                 </div>
             </div>
         </div>
@@ -43,9 +45,19 @@
 
         <div class="container-right" style="background-color: #fff">
             <div class="blog-content">
-                <h2 id="title" style="text-align: center">我的第一篇博客</h2>
+                <h1 id="title" style="text-align: center">我的第一篇博客</h1>
                 <!-- 博客时间 -->
-                <div style="color: #777" id="createtime" class="date">2021-06-02</div>
+                <div style="color: #777" class="date">
+                    <span>发布时间: </span>
+                    <span id="createtime">2021-06-02</span>
+                    &nbsp;
+                    <span>最近修改: </span>
+                    <span id="updatetime">2021-06-02</span>
+                    &nbsp;
+                    <span>阅读量: </span>
+                    <span id="count">1</span>
+
+                </div>
 
                 <div id="content_id">
 
@@ -76,10 +88,14 @@
             var content = "# 正在加载中...";
             var title = $("#title");
             var time = $("#createtime")
+            var count = $("#count");
             var str = location.href;
+            var uptime = $("#updatetime")
             console.log(str);
+
             var tmp = str.split('?')[1].split("=");
-            console.log(tmp)
+
+            document.getElementById("edit").href = "blog_update.html?id=" +  tmp[1];
             $.ajax({
                 type:"GET",
                 url:"article/getContent?id=" + tmp[1],
@@ -88,8 +104,10 @@
                 if( data.state == 1){
                     title.text(data.article.title);
                     content = data.article.content;
-                    console.log(content);
-                    time.text(data.article.createtime.split('.')[0].split('T')[0]);
+                    console.log(data);
+                    time.text(data.article.createtime);
+                    count.text(data.article.rcount);
+                    uptime.text(data.article.updatetime);
                 }else{
                     alert(data.msg);
                     location.href = "/blog_list.html";

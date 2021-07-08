@@ -3,6 +3,7 @@ package com.example.onen.service;
 import com.example.onen.dao.ArticleMapper;
 import com.example.onen.model.ArticleInfo;
 import com.example.onen.model.UserInfo;
+import com.example.onen.model.UserShow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,5 +39,10 @@ public class ArticleService {
 
     public boolean updateArt(ArticleInfo articleInfo) {
         return articleMapper.updateArt(articleInfo) > 0;
+    }
+
+    public UserShow selectRcount(int id) {
+
+        return articleMapper.getRcount( id);
     }
 }

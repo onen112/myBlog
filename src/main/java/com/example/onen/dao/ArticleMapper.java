@@ -2,6 +2,7 @@ package com.example.onen.dao;
 
 import com.example.onen.model.ArticleInfo;
 import com.example.onen.model.UserInfo;
+import com.example.onen.model.UserShow;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.ArrayList;
@@ -18,4 +19,6 @@ public interface ArticleMapper {
     int deleteArt(int id);
 
     int updateArt(ArticleInfo articleInfo);
+
+    UserShow getRcount(int id);
 }
