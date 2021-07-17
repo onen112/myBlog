@@ -81,7 +81,7 @@ public class ArticleController {
           article = articleService.getArticleById(id);
           if(article != null){
               state = 1;
-              msg = "查询成功";
+              msg = "查询成功";   
           }
         }
         Map<String,Object> map = new HashMap<>();
